@@ -38,7 +38,10 @@ def repos_finder(absolute_path: str, repo_name: str):
             # Updated the found repo to return
             found_repo += path_to_repo
 
-            return found_repo
+            if platform.system() == 'Linux':
+                return '/' + found_repo
+            else:
+                return found_repo
 
         else:
             # Get index of directory
@@ -52,7 +55,10 @@ def repos_finder(absolute_path: str, repo_name: str):
                     path_to_repo = '/'.join(split_path[:dir_index + 1]) + f'/{sub_dir}'
                     found_repo += path_to_repo
 
-                    return found_repo
+                    if platform.system() == 'Linux':
+                        return '/' + found_repo
+                    else:
+                        return found_repo
 
 
 if __name__ == '__main__':
