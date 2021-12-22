@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. scripts/vars
+. ./vars.sh
 
 if [ ! -d "$root_dir" ];
 then
@@ -24,10 +24,10 @@ for task in end2end ordering structing lexicalization
     if [ "$task" = "lexicalization" ] || [ "$task" = "end2end" ];
     then
       python3 $task/preprocess.py $corpus_dir $task_dir $stanford_path
-      ./scripts/preprocess_txt.sh
+      sh ./scripts/preprocess_txt.sh
     else
       python3 $task/preprocess.py $corpus_dir $task_dir
-      ./scripts/preprocess.sh
+      sh ./scripts/preprocess.sh
     fi
   done
 
@@ -57,7 +57,7 @@ for task in end2end ordering structing lexicalization
             fi
 
             echo "run=$run" >> scripts/tmp
-            ./scripts/$model.sh
+            sh ./scripts/$model.sh
           done
       done
   done
