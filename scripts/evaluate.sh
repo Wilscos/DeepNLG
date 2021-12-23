@@ -42,7 +42,7 @@ CUDA_VISIBLE_DEVICES=$devices python3 $nematus_home/nematus/translate.py \
      -n
 
 # postprocess
-$script_dir/postprocess.sh < $working_dir/$test_prefix.out > $working_dir/$test_prefix.out.postprocessed
+sh $script_dir/postprocess.sh < $working_dir/$test_prefix.out > $working_dir/$test_prefix.out.postprocessed
 
 # evaluate with detokenized BLEU (same as mteval-v13a.pl)
 if [ "$task" = "lexicalization" ] || [ "$task" = "end2end" ] || [ "$task" = "end2end_augmented" ];
