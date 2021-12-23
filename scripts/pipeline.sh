@@ -9,7 +9,7 @@ script_dir=`dirname $0`
 # temporary variables
 . $script_dir/tmp
 # variables (toolkits; source and target language)
-. $script_dir/vars
+. scripts/vars.sh
 
 main_dir=$script_dir/../
 working_dir=$task_dir/$model

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. ./vars.sh
+. scripts/vars.sh
 
 if [ ! -d "$root_dir" ];
 then
