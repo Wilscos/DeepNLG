@@ -2,9 +2,51 @@
 
 . scripts/vars.sh
 
-if [ ! -d "$root_dir" ];
-then
-  mkdir $root_dir
+echo "Checking directories ..."
+
+# Check if 'nematus' is in working directory
+if [ ! -d "$nematus_home" ]; then
+  echo "There is no 'nematus' directory. Please clone https://github.com/EdinburghNLP/nematus.git in
+        your working directory (ex. DeepNLG/nematus)"
+  exit
+else
+  echo "- nematus home: Check"
+fi
+
+# Check if 'mosesdecoder/scripts' is in working directory
+if [ ! -d "$moses_scripts" ]; then
+  echo "There is no 'mosesdecoder/scripts' directory. Please clone https://github.com/moses-smt/mosesdecoder.git in
+        your working directory (ex. DeepNLG/mosesdecoder/scripts)"
+  exit
+else
+  echo "- moses scripts: Check"
+fi
+
+# Check if 'suwbword-nmt' is in working directory
+if [ ! -d "$bpe_scripts" ]; then
+  echo "There is no 'subword-nmt' directory. Please clone https://github.com/rsennrich/subword-nmt.git in
+        your working directory (ex. DeepNLG/subword-nmt)"
+  exit
+else
+  echo "- bpe scripts: Check"
+fi
+
+# Check if 'versions/v1.4/en' is in working directory
+if [ ! -d "$corpus_dir" ]; then
+  echo "There is no 'versions/v1.4/en' directory. Please check if the directory was downloaded
+        correctly from the repository"
+  exit
+else
+  echo "- corpus dir: Check"
+fi
+
+# Check if 'versions/v1.4/en' is in working directory
+if [ ! -d "$stanford_path" ]; then
+  echo "There is no 'stanford-corenlp-4.3.2' directory. Please download from https://stanfordnlp.github.io/CoreNLP/ in
+        your working directory (ex. DeepNLG/stanford-corenlp-4.3.2 or any other version)"
+  exit
+else
+  echo "- stanford path: Check"
 fi
 
 # preprocessing
@@ -23,8 +65,14 @@ for task in end2end ordering structing lexicalization
     # preprocessing
     if [ "$task" = "lexicalization" ] || [ "$task" = "end2end" ];
     then
-      python3 $task/preprocess.py $corpus_dir $task_dir $stanford_path
-      sh ./scripts/preprocess_txt.sh
+      if [ "$OSTYPE" == "msys" ]; then
+        echo "Your OS: $OSTYPE"
+        python $task/preprocess.py $corpus_dir $task_dir $stanford_path
+        sh ./scripts/preprocess_txt.sh
+      else
+        python3 $task/preprocess.py $corpus_dir $task_dir $stanford_path
+        sh ./scripts/preprocess_txt.sh
+      fi
     else
       python3 $task/preprocess.py $corpus_dir $task_dir
       sh ./scripts/preprocess.sh
