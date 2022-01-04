@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Distributed under MIT license
 
 # this script evaluates the best model (according to BLEU early stopping)
@@ -21,7 +21,7 @@ working_dir=$task_dir/$model
 devices=0
 
 # ensemble the best models of the three runs
-if [ "$model" = "rnn" ];
+if [ "$model" == "rnn" ];
 then
   model_path=$working_dir/$model"1"/model.best-valid-script" "$working_dir/$model"2"/model.best-valid-script" "$working_dir/$model"3"/model.best-valid-script
 else
@@ -29,12 +29,22 @@ else
 fi
 
 # decode
-CUDA_VISIBLE_DEVICES=$devices python3 $nematus_home/nematus/translate.py \
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  CUDA_VISIBLE_DEVICES=$devices python $nematus_home/nematus/translate.py \
      -m $model_path \
      -i $pipeline_dir/$input \
      -o $pipeline_dir/$output \
      -k 5 \
      -n
+else
+  CUDA_VISIBLE_DEVICES=$devices python3 $nematus_home/nematus/translate.py \
+       -m $model_path \
+       -i $pipeline_dir/$input \
+       -o $pipeline_dir/$output \
+       -k 5 \
+       -n
+fi
 
 # postprocess
 $script_dir/postprocess.sh < $pipeline_dir/$output > $pipeline_dir/$output.postprocessed

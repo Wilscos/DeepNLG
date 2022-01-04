@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Distributed under MIT license
 
 # this sample script postprocesses the MT output,
@@ -13,7 +13,7 @@ script_dir=`dirname $0`
 
 main_dir=$script_dir/../
 
-if [ "$task" = "end2end" ] || [ "$task" = "end2end_augmented" ];
+if [ "$task" == "end2end" ] || [ "$task" == "end2end_augmented" ];
 then
   sed -r 's/\@\@ //g' |
   $moses_scripts/recaser/detruecase.perl |

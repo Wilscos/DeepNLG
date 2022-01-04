@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Distributed under MIT license
 
 # this sample script preprocesses a sample corpus, including tokenization,
@@ -19,9 +19,19 @@ data_dir=$task_dir/data
 $moses_scripts/training/clean-corpus-n.perl $data_dir/train $src $trg $data_dir/corpus 1 80
 
 # build network dictionaries for separate source / target vocabularies
-python3 $nematus_home/data/build_dictionary.py $data_dir/corpus.$src $data_dir/corpus.$trg
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  python $nematus_home/data/build_dictionary.py $data_dir/corpus.$src $data_dir/corpus.$trg
+else
+  python3 $nematus_home/data/build_dictionary.py $data_dir/corpus.$src $data_dir/corpus.$trg
+fi
 
 # build network dictionary for combined source + target vocabulary (for use
 # with tied encoder-decoder embeddings)
 cat $data_dir/corpus.$src $data_dir/corpus.$trg > $data_dir/corpus.both
-python3 $nematus_home/data/build_dictionary.py $data_dir/corpus.both
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  python $nematus_home/data/build_dictionary.py $data_dir/corpus.both
+else
+  python3 $nematus_home/data/build_dictionary.py $data_dir/corpus.both
+fi

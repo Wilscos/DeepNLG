@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Distributed under MIT license
 
 # this script evaluates the best model (according to BLEU early stopping)
@@ -34,12 +34,22 @@ else
 fi
 
 # decode
-CUDA_VISIBLE_DEVICES=$devices python3 $nematus_home/nematus/translate.py \
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  CUDA_VISIBLE_DEVICES=$devices python $nematus_home/nematus/translate.py \
      -m $model_path \
      -i $data_dir/$test \
      -o $working_dir/$test_prefix.out \
      -k 5 \
      -n
+else
+  CUDA_VISIBLE_DEVICES=$devices python3 $nematus_home/nematus/translate.py \
+       -m $model_path \
+       -i $data_dir/$test \
+       -o $working_dir/$test_prefix.out \
+       -k 5 \
+       -n
+fi
 
 # postprocess
 sh $script_dir/postprocess.sh < $working_dir/$test_prefix.out > $working_dir/$test_prefix.out.postprocessed
@@ -49,5 +59,10 @@ if [ "$task" = "lexicalization" ] || [ "$task" = "end2end" ] || [ "$task" = "end
 then
   $nematus_home/data/multi-bleu-detok.perl $refs < $working_dir/$test_prefix.out.postprocessed
 else
-  python3 $script_dir/accuracy.py $ref $working_dir/$test_prefix.out.postprocessed
+  if [ "$OSTYPE" == "msys" ]; then
+    echo "Your OS: $OSTYPE"
+    python $script_dir/accuracy.py $ref $working_dir/$test_prefix.out.postprocessed
+  else
+    python3 $script_dir/accuracy.py $ref $working_dir/$test_prefix.out.postprocessed
+  fi
 fi

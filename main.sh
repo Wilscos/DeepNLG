@@ -63,7 +63,7 @@ for task in end2end ordering structing lexicalization
     echo "task_dir=$task_dir" >> scripts/tmp
 
     # preprocessing
-    if [ "$task" = "lexicalization" ] || [ "$task" = "end2end" ];
+    if [ "$task" == "lexicalization" ] || [ "$task" == "end2end" ];
     then
       if [ "$OSTYPE" == "msys" ]; then
         echo "Your OS: $OSTYPE"
@@ -74,8 +74,14 @@ for task in end2end ordering structing lexicalization
         sh ./scripts/preprocess_txt.sh
       fi
     else
-      python3 $task/preprocess.py $corpus_dir $task_dir
-      sh ./scripts/preprocess.sh
+      if [ "$OSTYPE" == "msys" ]; then
+        echo "Your OS: $OSTYPE"
+        python $task/preprocess.py $corpus_dir $task_dir
+        sh ./scripts/preprocess.sh
+      else
+        python3 $task/preprocess.py $corpus_dir $task_dir
+        sh ./scripts/preprocess.sh
+      fi
     fi
   done
 
@@ -83,7 +89,13 @@ if [ ! -d "$root_dir/reg" ];
 then
   mkdir $root_dir/reg
 fi
-python3 reg/preprocess.py $corpus_dir $root_dir/reg $stanford_path
+
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  python reg/preprocess.py $corpus_dir $root_dir/reg $stanford_path
+else
+  python3 reg/preprocess.py $corpus_dir $root_dir/reg $stanford_path
+fi
 
 # training the models for ordering, structing, lexicalization and end-to-end
 for task in end2end ordering structing lexicalization
@@ -111,7 +123,12 @@ for task in end2end ordering structing lexicalization
   done
 
 # training NeuralREG for Referring Expression Generation
-python3 reg/neuralreg.py --dynet-gpu
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  python reg/neuralreg.py --dynet-gpu
+else
+  python3 reg/neuralreg.py --dynet-gpu
+fi
 
 echo "Baselines Evaluation"
 root_baseline=$root_dir/baselines
@@ -134,8 +151,12 @@ for task in ordering structing lexicalization
         for set in dev test
           do
             cp $root_dir/$task/data/$set.$eval $root_task
-            python3 $task/$baseline.py $root_task/$set.$eval $root_task/$baseline.$set $root_dir/$task/data/train.json
-
+            if [ "$OSTYPE" == "msys" ]; then
+              echo "Your OS: $OSTYPE"
+              python $task/$baseline.py $root_task/$set.$eval $root_task/$baseline.$set $root_dir/$task/data/train.json
+            else
+              python3 $task/$baseline.py $root_task/$set.$eval $root_task/$baseline.$set $root_dir/$task/data/train.json
+            fi
             ref=$root_dir/$task/data/references/$set.$trg
             refs=$ref"1 "$ref"2 "$ref"3 "$ref"4 "$ref"5"
 
@@ -146,7 +167,12 @@ for task in ordering structing lexicalization
               $nematus_home/data/multi-bleu-detok.perl $refs < $root_task/$baseline.$set
             else
               script_dir=`dirname $0`/scripts
-              python3 $script_dir/accuracy.py $ref $root_task/$baseline.$set
+              if [ "$OSTYPE" == "msys" ]; then
+                echo "Your OS: $OSTYPE"
+                python $script_dir/accuracy.py $ref $root_task/$baseline.$set
+              else
+                python3 $script_dir/accuracy.py $ref $root_task/$baseline.$set
+              fi
             fi
           done
       done
@@ -207,17 +233,32 @@ for baseline in rand major
         #echo "task_dir=$task_dir" >> scripts/tmp
 
         # ordering
-        python3 ordering/$baseline.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering $root_dir/ordering/data/train.json
-        python3 mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering ordering $pipeline_dir/$set.ordering.mapped
-        # structing
-        python3 structing/$baseline.py $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.structing $root_dir/structing/data/train.json
-        python3 mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.structing structing $pipeline_dir/$set.structing.mapped
-        # lexicalization
-        python3 lexicalization/$baseline.py $pipeline_dir/$set.structing.mapped $pipeline_dir/$set.lex $root_dir/structing/data/train.json
-        # referring expression generation
-        python3 reg/generate.py $pipeline_dir/$set.lex $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.reg baseline path
-        # textual realization
-        python3 realization.py $pipeline_dir/$set.reg $pipeline_dir/$set.realized $root_dir/lexicalization/surfacevocab.json
+        if [ "$OSTYPE" == "msys" ]; then
+          echo "Your OS: $OSTYPE"
+          python ordering/$baseline.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering $root_dir/ordering/data/train.json
+          python mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering ordering $pipeline_dir/$set.ordering.mapped
+          # structing
+          python structing/$baseline.py $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.structing $root_dir/structing/data/train.json
+          python mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.structing structing $pipeline_dir/$set.structing.mapped
+          # lexicalization
+          python lexicalization/$baseline.py $pipeline_dir/$set.structing.mapped $pipeline_dir/$set.lex $root_dir/structing/data/train.json
+          # referring expression generation
+          python reg/generate.py $pipeline_dir/$set.lex $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.reg baseline path
+          # textual realization
+          python realization.py $pipeline_dir/$set.reg $pipeline_dir/$set.realized $root_dir/lexicalization/surfacevocab.json
+        else
+          python3 ordering/$baseline.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering $root_dir/ordering/data/train.json
+          python3 mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering ordering $pipeline_dir/$set.ordering.mapped
+          # structing
+          python3 structing/$baseline.py $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.structing $root_dir/structing/data/train.json
+          python3 mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.structing structing $pipeline_dir/$set.structing.mapped
+          # lexicalization
+          python3 lexicalization/$baseline.py $pipeline_dir/$set.structing.mapped $pipeline_dir/$set.lex $root_dir/structing/data/train.json
+          # referring expression generation
+          python3 reg/generate.py $pipeline_dir/$set.lex $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.reg baseline path
+          # textual realization
+          python3 realization.py $pipeline_dir/$set.reg $pipeline_dir/$set.realized $root_dir/lexicalization/surfacevocab.json
+        fi
 
         cat $pipeline_dir/$set.realized | \
         sed -r 's/\@\@ //g' |
@@ -260,8 +301,12 @@ for model in transformer rnn
         echo "input=$set.$eval" >> scripts/tmp
         echo "output=$set.ordering" >> scripts/tmp
         sh ./scripts/pipeline.sh
-        python3 mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering.postprocessed ordering $pipeline_dir/$set.ordering.mapped
-
+        if [ "$OSTYPE" == "msys" ]; then
+          echo "Your OS: $OSTYPE"
+          python mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering.postprocessed ordering $pipeline_dir/$set.ordering.mapped
+        else
+          python3 mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering.postprocessed ordering $pipeline_dir/$set.ordering.mapped
+        fi
         # structuring
         task=structing
         echo "pipeline_dir=$pipeline_dir" > scripts/tmp
@@ -271,7 +316,12 @@ for model in transformer rnn
         echo "input=$set.ordering.mapped" >> scripts/tmp
         echo "output=$set.structing" >> scripts/tmp
         sh ./scripts/pipeline.sh
-        python3 mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.structing.postprocessed structing $pipeline_dir/$set.structing.mapped
+        if [ "$OSTYPE" == "msys" ]; then
+          echo "Your OS: $OSTYPE"
+          python mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.structing.postprocessed structing $pipeline_dir/$set.structing.mapped
+        else
+          python3 mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.structing.postprocessed structing $pipeline_dir/$set.structing.mapped
+        fi
 
         # lexicalization
         task=lexicalization
@@ -282,13 +332,22 @@ for model in transformer rnn
         echo "input=$set.structing.mapped" >> scripts/tmp
         echo "output=$set.lex" >> scripts/tmp
         sh ./scripts/pipeline.sh
-        python3 mapping.py $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.lex.postprocessed lexicalization $pipeline_dir/$set.lex.mapped
 
-        # reg
-        python3 reg/generate.py $pipeline_dir/$set.lex.postprocessed $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.reg neuralreg $root_dir/reg/model1.dy
+        if [ "$OSTYPE" == "msys" ]; then
+          echo "Your OS: $OSTYPE"
+          python mapping.py $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.lex.postprocessed lexicalization $pipeline_dir/$set.lex.mapped
+          # reg
+          python reg/generate.py $pipeline_dir/$set.lex.postprocessed $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.reg neuralreg $root_dir/reg/model1.dy
+          # textual realization
+          python realization.py $pipeline_dir/$set.reg $pipeline_dir/$set.realized $root_dir/lexicalization/surfacevocab.json
+        else
+          python3 mapping.py $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.lex.postprocessed lexicalization $pipeline_dir/$set.lex.mapped
+          # reg
+          python3 reg/generate.py $pipeline_dir/$set.lex.postprocessed $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.reg neuralreg $root_dir/reg/model1.dy
+          # textual realization
+          python3 realization.py $pipeline_dir/$set.reg $pipeline_dir/$set.realized $root_dir/lexicalization/surfacevocab.json
+        fi
 
-        # textual realization
-        python3 realization.py $pipeline_dir/$set.reg $pipeline_dir/$set.realized $root_dir/lexicalization/surfacevocab.json
         cat $pipeline_dir/$set.realized | \
         sed -r 's/\@\@ //g' |
         $moses_scripts/tokenizer/normalize-punctuation.perl -l $lng > $pipeline_dir/$set.out

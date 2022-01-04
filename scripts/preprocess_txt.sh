@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Distributed under MIT license
 
 # this sample script preprocesses a sample corpus, including tokenization,
@@ -44,20 +44,40 @@ for prefix in dev test
  done
 
 # train BPE
-$bpe_scripts/learn_joint_bpe_and_vocab.py -i $data_dir/corpus.tc.$trg --write-vocabulary $data_dir/vocab.$trg -s $bpe_operations -o $data_dir/$trg.bpe
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  python $bpe_scripts/learn_joint_bpe_and_vocab.py -i=$data_dir/corpus.tc.$trg --write-vocabulary=$data_dir/vocab.$trg -s=$bpe_operations -o=$data_dir/$trg.bpe
+else
+  python3 $bpe_scripts/learn_joint_bpe_and_vocab.py -i "$data_dir/corpus.tc.$trg" --write-vocabulary "$data_dir/vocab.$trg" -s $bpe_operations -o "$data_dir/$trg.bpe"
+fi
 
 # apply BPE
 
 for prefix in corpus dev test
- do
-  cat $data_dir/$prefix.tc.$src > $data_dir/$prefix.bpe.$src
-  $bpe_scripts/apply_bpe.py -c $data_dir/$trg.bpe --vocabulary $data_dir/vocab.$trg --vocabulary-threshold $bpe_threshold < $data_dir/$prefix.tc.$trg > $data_dir/$prefix.bpe.$trg
- done
+  do
+    cat $data_dir/$prefix.tc.$src > $data_dir/$prefix.bpe.$src
+    if [ "$OSTYPE" == "msys" ]; then
+      echo "Your OS: $OSTYPE"
+      python $bpe_scripts/apply_bpe.py -c $data_dir/$trg.bpe --vocabulary $data_dir/vocab.$trg --vocabulary-threshold $bpe_threshold < $data_dir/$prefix.tc.$trg > $data_dir/$prefix.bpe.$trg
+    else
+      python3 $bpe_scripts/apply_bpe.py -c $data_dir/$trg.bpe --vocabulary $data_dir/vocab.$trg --vocabulary-threshold $bpe_threshold < $data_dir/$prefix.tc.$trg > $data_dir/$prefix.bpe.$trg
+    fi
+  done
 
 # build network dictionaries for separate source / target vocabularies
-python3 $nematus_home/data/build_dictionary.py $data_dir/corpus.bpe.$src $data_dir/corpus.bpe.$trg
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  python $nematus_home/data/build_dictionary.py $data_dir/corpus.bpe.$src $data_dir/corpus.bpe.$trg
+else
+  python3 $nematus_home/data/build_dictionary.py $data_dir/corpus.bpe.$src $data_dir/corpus.bpe.$trg
+fi
 
 # build network dictionary for combined source + target vocabulary (for use
 # with tied encoder-decoder embeddings)
 cat $data_dir/corpus.bpe.$src $data_dir/corpus.bpe.$trg > $data_dir/corpus.bpe.both
-python3 $nematus_home/data/build_dictionary.py $data_dir/corpus.bpe.both
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  python $nematus_home/data/build_dictionary.py $data_dir/corpus.bpe.both
+else
+  python3 $nematus_home/data/build_dictionary.py $data_dir/corpus.bpe.both
+fi

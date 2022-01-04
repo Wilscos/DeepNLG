@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+# Source and target ($data_dir/corpus.src and $data_dir/corpus.trg
+src=src
+trg=trg
+eval="eval"
+# Language
+lng=en
+
+echo "- Source corpus: corpus.$src"
+echo "- Target corpus: corpus.$trg"
+echo "- Validation data: dev.$eval"
+echo "- Language: $lng"
+
 # Current working directory
 scripts_directory=$( cd "$(dirname "${BASH_SOURCE[0]}")" || exit; pwd -P )
 working_directory="$( dirname "$scripts_directory")"

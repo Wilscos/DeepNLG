@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Distributed under MIT license
 
 # this script evaluates translations of the newstest2013 test set
@@ -24,12 +24,17 @@ refs=$ref"1 "$ref"2 "$ref"3 "$ref"4 "$ref"5"
 
 # evaluate translations and write BLEU score to standard output (for
 # use by nmt.py)
-if [ "$task" = "lexicalization" ] || [ "$task" = "end2end" ];
+if [ "$task" == "lexicalization" ] || [ "$task" == "end2end" ];
 then
   $script_dir/postprocess.sh < $translations | \
       $nematus_home/data/multi-bleu-detok.perl $refs | \
       cut -f 3 -d ' ' | \
       cut -f 1 -d ','
 else
-  python3 $script_dir/accuracy.py $ref $translations
+  if [ "$OSTYPE" == "msys" ]; then
+    echo "Your OS: $OSTYPE"
+    python $script_dir/accuracy.py $ref $translations
+  else
+    python3 $script_dir/accuracy.py $ref $translations
+  fi
 fi
