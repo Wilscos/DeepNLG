@@ -13,7 +13,8 @@ sys.path.append('./')
 import json
 import os
 
-class Preprocess():
+
+class Preprocess:
     def __init__(self, data_path, write_path):
         self.write_path = write_path
         self.data_path = data_path
@@ -46,7 +47,6 @@ class Preprocess():
         self.stats(traindata, path=os.path.join(path, 'train.stats'))
         self.stats(devdata, path=os.path.join(path, 'dev.stats'))
         self.stats(testdata, path=os.path.join(path, 'test.stats'))
-
 
     def stats(self, data, path):
         srcsize, srcvocab = [], []
@@ -86,23 +86,22 @@ class Preprocess():
             f.write('\n')
             f.write('Vocab Size: ' + str(trgtvocabsize))
 
-
     def save(self, data, path, fname):
         nfiles = max([len(entry['targets']) for entry in data])
 
         if not os.path.exists(path):
             os.mkdir(path)
 
-        fsrc = open(os.path.join(path, fname) + '.src', 'w')
-        ftrgt = open(os.path.join(path, fname) + '.trg', 'w')
+        fsrc = open(os.path.join(path, fname) + '.src', 'w', encoding="utf-8")
+        ftrgt = open(os.path.join(path, fname) + '.trg', 'w', encoding="utf-8")
 
-        feval = open(os.path.join(path, fname) + '.eval', 'w')
-        finfo = open(os.path.join(path, fname) + '.info', 'w')
+        feval = open(os.path.join(path, fname) + '.eval', 'w', encoding="utf-8")
+        finfo = open(os.path.join(path, fname) + '.info', 'w', encoding="utf-8")
 
         ref_path = os.path.join(path, 'references')
         if not os.path.exists(ref_path):
             os.mkdir(ref_path)
-        frefs = [open(os.path.join(ref_path, fname + '.trg' + str(i+1)), 'w') for i in range(nfiles)]
+        frefs = [open(os.path.join(ref_path, fname + '.trg' + str(i+1)), 'w', encoding="utf-8") for i in range(nfiles)]
 
         for entry in data:
             src = entry['source']
@@ -136,4 +135,3 @@ class Preprocess():
         finfo.close()
         for fref in frefs:
             fref.close()
-
