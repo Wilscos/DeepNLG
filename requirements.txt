@@ -46,5 +46,3 @@ wrapt==1.13.3
 zipp==3.7.0
 git+https://github.com/Wilscos/nematus.git@master#egg=nematus
 git+https://github.com/rsennrich/subword-nmt.git@master#egg=subword-nmt
-git+https://github.com/moses-smt/mosesdecoder.git@master#egg=mosesdecoder
-
