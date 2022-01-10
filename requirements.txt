@@ -44,5 +44,3 @@ urllib3==1.26.7
 Werkzeug==2.0.2
 wrapt==1.13.3
 zipp==3.7.0
-git+https://github.com/Wilscos/nematus.git@master#egg=nematus
-git+https://github.com/rsennrich/subword-nmt.git@master#egg=subword-nmt
