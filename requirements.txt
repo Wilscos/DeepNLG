@@ -44,7 +44,7 @@ urllib3==1.26.7
 Werkzeug==2.0.2
 wrapt==1.13.3
 zipp==3.7.0
-git+git://github.com/Wilscos/nematus@master#egg=nematus
-git+git://github.com/rsennrich/subword-nmt@master#egg=subword-nmt
-git+git://github.com/moses-smt/mosesdecoder@master#egg=mosesdecoder
+git+https://github.com/Wilscos/nematus@master#egg=nematus
+git+https://github.com/rsennrich/subword-nmt@master#egg=subword-nmt
+git+https://github.com/moses-smt/mosesdecoder@master#egg=mosesdecoder
 
