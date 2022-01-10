@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Source and target ($data_dir/corpus.src and $data_dir/corpus.trg
+# Source and target ($data_dir/corpus.src and $data_dir/corpus.trg)
 src=src
 trg=trg
 eval="eval"
@@ -15,6 +15,7 @@ echo "- Language: $lng"
 # Current working directory
 scripts_directory=$( cd "$(dirname "${BASH_SOURCE[0]}")" || exit; pwd -P )
 working_directory="$( dirname "$scripts_directory")"
+echo "Working directory $working_directory"
 
 # Nematus home path
 nematus_home=$working_directory/nematus
@@ -34,8 +35,9 @@ echo "- bpe scripts: $bpe_scripts"
 corpus_dir=$working_directory/versions/v1.4/en
 echo "- corpus dir: $corpus_dir"
 
-# Path to the Stanford parser (StanfordCoreNLP latest version 4.3.2)
-stanford_path=$working_directory/stanford-corenlp-4.3.2
+# Path to the Stanford parser (StanfordCoreNLP latest version)
+stanford_corenlp=( stanford* )
+stanford_path="$working_directory/$stanford_corenlp"
 echo "- stanford path: $stanford_path"
 
 # Root path where the results are stored

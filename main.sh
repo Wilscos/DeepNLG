@@ -6,27 +6,24 @@ echo "Checking directories ..."
 
 # Check if 'nematus' is in working directory
 if [ ! -d "$nematus_home" ]; then
-  echo "There is no 'nematus' directory. Please clone https://github.com/EdinburghNLP/nematus.git in
-        your working directory (ex. DeepNLG/nematus)"
-  exit
+  echo "Cloning https://github.com/Wilscos/nematus.git in your working directory (ex. DeepNLG/nematus) ..."
+  git clone https://github.com/Wilscos/nematus.git
 else
   echo "- nematus home: Check"
 fi
 
 # Check if 'mosesdecoder/scripts' is in working directory
 if [ ! -d "$moses_scripts" ]; then
-  echo "There is no 'mosesdecoder/scripts' directory. Please clone https://github.com/moses-smt/mosesdecoder.git in
-        your working directory (ex. DeepNLG/mosesdecoder/scripts)"
-  exit
+  echo "Cloning https://github.com/moses-smt/mosesdecoder.git in your working directory (DeepNLG/mosesdecoder/scripts) ..."
+  git clone https://github.com/moses-smt/mosesdecoder.git
 else
   echo "- moses scripts: Check"
 fi
 
 # Check if 'suwbword-nmt' is in working directory
 if [ ! -d "$bpe_scripts" ]; then
-  echo "There is no 'subword-nmt' directory. Please clone https://github.com/rsennrich/subword-nmt.git in
-        your working directory (ex. DeepNLG/subword-nmt)"
-  exit
+  echo "Cloning https://github.com/rsennrich/subword-nmt.git in your working directory (ex. DeepNLG/subword-nmt) ..."
+  git clone https://github.com/rsennrich/subword-nmt.git
 else
   echo "- bpe scripts: Check"
 fi
@@ -42,9 +39,10 @@ fi
 
 # Check if 'versions/v1.4/en' is in working directory
 if [ ! -d "$stanford_path" ]; then
-  echo "There is no 'stanford-corenlp-4.3.2' directory. Please download from https://stanfordnlp.github.io/CoreNLP/ in
-        your working directory (ex. DeepNLG/stanford-corenlp-4.3.2 or any other version)"
-  exit
+  echo "Downloading from https://stanfordnlp.github.io/CoreNLP/ in your working directory (ex. DeepNLG/stanford-corenlp-xx.xx.xx)"
+  wget --no-check-certificate https://nlp.stanford.edu/software/stanford-corenlp-latest.zip
+  unzip stanford-corenlp-latest.zip
+  rm stanford-corenlp-latest.zip
 else
   echo "- stanford path: Check"
 fi
