@@ -29,7 +29,9 @@ import os
 from collections import Counter
 from stanfordcorenlp import StanfordCoreNLP
 
-STANFORD_PATH=r'/home/tcastrof/workspace/stanford/stanford-corenlp-full-2018-02-27'
+# Absolute path to 'stanford-corenlp'
+STANFORD_PATH = os.path.abspath('stanford-corenlp-4.3.2')
+
 
 class Tree:
     def __init__(self, tree, tokens, lemmas):
