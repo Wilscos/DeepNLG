@@ -27,7 +27,7 @@ moses_scripts=$moses_home/scripts
 echo "- moses scripts: $moses_scripts"
 
 # Path to suwbword-nmt directory
-bpe_scripts=$working_directory/subword-nmt
+bpe_scripts=$working_directory/subword-nmt/subword_nmt
 echo "- bpe scripts: $bpe_scripts"
 
 # Path to the corpus directory, the directory storing the data
