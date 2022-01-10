@@ -46,7 +46,7 @@ for prefix in dev test
 # train BPE
 if [ "$OSTYPE" == "msys" ]; then
   echo "Your OS: $OSTYPE"
-  python $bpe_scripts/learn_joint_bpe_and_vocab.py -i=$data_dir/corpus.tc.$trg --write-vocabulary=$data_dir/vocab.$trg -s=$bpe_operations -o=$data_dir/$trg.bpe
+  python $bpe_scripts/learn_joint_bpe_and_vocab.py -i $data_dir/corpus.tc.$trg --write-vocabulary $data_dir/vocab.$trg -s $bpe_operations -o $data_dir/$trg.bpe
 else
   python3 $bpe_scripts/learn_joint_bpe_and_vocab.py -i "$data_dir/corpus.tc.$trg" --write-vocabulary "$data_dir/vocab.$trg" -s $bpe_operations -o "$data_dir/$trg.bpe"
 fi
