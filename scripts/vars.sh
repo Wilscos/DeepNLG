@@ -13,9 +13,15 @@ echo "- Validation data: dev.$eval"
 echo "- Language: $lng"
 
 # Current working directory
-scripts_directory=$( cd "$(dirname "${BASH_SOURCE[0]}")" || exit; pwd -P )
-working_directory="$( dirname "$scripts_directory")"
-echo "Working directory $working_directory"
+if [ "$OSTYPE" == "msys" ]; then
+  echo "Your OS: $OSTYPE"
+  scripts_directory=$( cd "$(dirname "${BASH_SOURCE[0]}")" || exit; pwd -P )
+  working_directory="$( dirname "$scripts_directory")"
+  echo "(OS: msys) Working directory $working_directory"
+else
+  working_directory=$( cd "$(dirname "${BASH_SOURCE[0]}")" || exit; pwd -P )
+  echo "Working directory $working_directory"
+fi
 
 # Nematus home path
 nematus_home=$working_directory/nematus
