@@ -26,7 +26,7 @@ refs=$ref"1 "$ref"2 "$ref"3 "$ref"4 "$ref"5"
 # use by nmt.py)
 if [ "$task" == "lexicalization" ] || [ "$task" == "end2end" ];
 then
-  $script_dir/postprocess.sh < $translations | \
+  sh $script_dir/postprocess.sh < $translations | \
       $nematus_home/data/multi-bleu-detok.perl $refs | \
       cut -f 3 -d ' ' | \
       cut -f 1 -d ','

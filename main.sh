@@ -66,19 +66,19 @@ for task in end2end ordering structing lexicalization
       if [ "$OSTYPE" == "msys" ]; then
         echo "Your OS: $OSTYPE"
         python $task/preprocess.py $corpus_dir $task_dir $stanford_path
-        sh ./scripts/preprocess_txt.sh
+        bash ./scripts/preprocess_txt.sh
       else
         python3 $task/preprocess.py $corpus_dir $task_dir $stanford_path
-        sh ./scripts/preprocess_txt.sh
+        bash ./scripts/preprocess_txt.sh
       fi
     else
       if [ "$OSTYPE" == "msys" ]; then
         echo "Your OS: $OSTYPE"
         python $task/preprocess.py $corpus_dir $task_dir
-        sh ./scripts/preprocess.sh
+        bash ./scripts/preprocess.sh
       else
         python3 $task/preprocess.py $corpus_dir $task_dir
-        sh ./scripts/preprocess.sh
+        bash ./scripts/preprocess.sh
       fi
     fi
   done
@@ -115,7 +115,7 @@ for task in end2end ordering structing lexicalization
             fi
 
             echo "run=$run" >> scripts/tmp
-            sh ./scripts/$model.sh
+            bash ./scripts/$model.sh
           done
       done
   done
@@ -197,7 +197,7 @@ for task in ordering structing lexicalization end2end
             echo "task_dir=$task_dir" >> scripts/tmp
             echo "model=$model" >> scripts/tmp
             echo "test_prefix=$set" >> scripts/tmp
-            sh ./scripts/evaluate.sh
+            bash ./scripts/evaluate.sh
           done
       done
   done
@@ -300,7 +300,7 @@ for model in transformer rnn
         echo "model=$model" >> scripts/tmp
         echo "input=$set.$eval" >> scripts/tmp
         echo "output=$set.ordering" >> scripts/tmp
-        sh ./scripts/pipeline.sh
+        bash ./scripts/pipeline.sh
         if [ "$OSTYPE" == "msys" ]; then
           echo "Your OS: $OSTYPE"
           python mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering.postprocessed ordering $pipeline_dir/$set.ordering.mapped
@@ -315,7 +315,7 @@ for model in transformer rnn
         echo "model=$model" >> scripts/tmp
         echo "input=$set.ordering.mapped" >> scripts/tmp
         echo "output=$set.structing" >> scripts/tmp
-        sh ./scripts/pipeline.sh
+        bash ./scripts/pipeline.sh
         if [ "$OSTYPE" == "msys" ]; then
           echo "Your OS: $OSTYPE"
           python mapping.py $pipeline_dir/$set.$eval $pipeline_dir/$set.structing.postprocessed structing $pipeline_dir/$set.structing.mapped
@@ -331,7 +331,7 @@ for model in transformer rnn
         echo "model=$model" >> scripts/tmp
         echo "input=$set.structing.mapped" >> scripts/tmp
         echo "output=$set.lex" >> scripts/tmp
-        sh ./scripts/pipeline.sh
+        bash ./scripts/pipeline.sh
 
         if [ "$OSTYPE" == "msys" ]; then
           echo "Your OS: $OSTYPE"

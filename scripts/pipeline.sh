@@ -47,4 +47,4 @@ else
 fi
 
 # postprocess
-$script_dir/postprocess.sh < $pipeline_dir/$output > $pipeline_dir/$output.postprocessed
+bash $script_dir/postprocess.sh < $pipeline_dir/$output > $pipeline_dir/$output.postprocessed

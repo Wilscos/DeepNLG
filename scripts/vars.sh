@@ -13,7 +13,7 @@ echo "- Validation data: dev.$eval"
 echo "- Language: $lng"
 
 # Current working directory
-if [[ $OSTYPE == "msys" ]]; then
+if [ "$OSTYPE" == "msys" ]; then
   echo "Your OS: $OSTYPE"
   scripts_directory=$( cd "$(dirname "${BASH_SOURCE[0]}")" || exit; pwd -P )
   working_directory="$( dirname "$scripts_directory")"
