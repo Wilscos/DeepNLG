@@ -13,7 +13,7 @@ echo "- Validation data: dev.$eval"
 echo "- Language: $lng"
 
 # Current working directory
-if [ "$OSTYPE" == "msys" ]; then
+if [[ $OSTYPE == "msys" ]]; then
   echo "Your OS: $OSTYPE"
   scripts_directory=$( cd "$(dirname "${BASH_SOURCE[0]}")" || exit; pwd -P )
   working_directory="$( dirname "$scripts_directory")"
@@ -42,9 +42,9 @@ corpus_dir=$working_directory/versions/v1.4/en
 echo "- corpus dir: $corpus_dir"
 
 # Path to the Stanford parser (StanfordCoreNLP latest version)
-stanford_corenlp=( stanford* )
-stanford_path="$working_directory/$stanford_corenlp"
-echo "- stanford path: $stanford_path"
+stanford_corenlp=stanford*
+stanford_path="$working_directory/"$stanford_corenlp
+echo "- stanford path:" $stanford_path
 
 # Root path where the results are stored
 root_dir=$working_directory/results

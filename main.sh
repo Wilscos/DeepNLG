@@ -38,7 +38,7 @@ else
 fi
 
 # Check if 'versions/v1.4/en' is in working directory
-if [ ! -d "$stanford_path" ]; then
+if [ ! -d $stanford_path ]; then
   echo "Downloading from https://stanfordnlp.github.io/CoreNLP/ in your working directory (ex. DeepNLG/stanford-corenlp-xx.xx.xx)"
   wget --no-check-certificate https://nlp.stanford.edu/software/stanford-corenlp-latest.zip
   unzip stanford-corenlp-latest.zip
