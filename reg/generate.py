@@ -131,7 +131,7 @@ class REG:
             print('Progress: ', round(i / len(entries), 2), end='\r')
             result.append(self.realize(entry, entity_maps[i]))
         # result = [self.realize(entry, entity_maps[i]) for i, entry in enumerate(entries)]
-        with open(out_path, 'w') as f:
+        with open(out_path, 'w', encoding='utf-8') as f:
             out = [' '.join(predicates) for predicates in result]
             f.write('\n'.join(out))
 
