@@ -24,6 +24,7 @@ import os
 from itertools import permutations
 from random import randint
 
+
 class RandomOrder():
     def predict(self, source):
         src_triples = utils.delexicalize(utils.split_triples(source))
@@ -33,7 +34,6 @@ class RandomOrder():
 
         predicates = perm[pos]
         return predicates
-
 
     def evaluate(self, data):
         references, predictions = [], []
@@ -56,15 +56,17 @@ class RandomOrder():
         print('Accuracy: ', num / dem)
         return predictions, references
 
-
     def __call__(self, in_path, out_path):
-        with open(in_path) as f:
+        with open(in_path, encoding='utf-8') as f:
+            print(f'File (in_path) type in rand.py: {type(f)}')
             entries = [t.split() for t in f.read().split('\n')]
         result = [self.predict(triples) for triples in entries]
 
-        with open(out_path, 'w') as f:
+        with open(out_path, 'w', encoding='utf-8') as f:
+            print(f'File (out_path) type in rand.py: {type(f)}')
             doc = [' '.join(predicates) for predicates in result]
             f.write('\n'.join(doc))
+
 
 if __name__ == '__main__':
     model = RandomOrder()
@@ -75,11 +77,11 @@ if __name__ == '__main__':
         model(in_path=in_path, out_path=out_path)
     else:
         print('Dev set:')
-        path = '/roaming/tcastrof/emnlp2019/ordering/data'
+        path = os.path.abspath('DeepNLG/evaluation/data/ordering')
         devdata = json.load(open(os.path.join(path, 'dev.json')))
         model.evaluate(devdata)
 
         print('Test set:')
-        path = '/roaming/tcastrof/emnlp2019/ordering/data'
+        path = os.path.abspath('DeepNLG/evaluation/data/ordering')
         testdata = json.load(open(os.path.join(path, 'test.json')))
         model.evaluate(testdata)

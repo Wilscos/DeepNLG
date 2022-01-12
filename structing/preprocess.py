@@ -25,6 +25,7 @@ import utils
 
 from superpreprocess import Preprocess
 
+
 class Structing(Preprocess):
     def __init__(self, data_path, write_path):
         super().__init__(data_path=data_path, write_path=write_path)
@@ -141,7 +142,7 @@ class Structing(Preprocess):
 
         invocab = list(set(invocab))
         outvocab = list(set(outvocab))
-        vocab = { 'input': invocab, 'output': outvocab }
+        vocab = {'input': invocab, 'output': outvocab}
 
         print('Path:', path, 'Size: ', size)
         return data, vocab

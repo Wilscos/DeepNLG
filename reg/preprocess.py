@@ -152,6 +152,6 @@ if __name__ == '__main__':
 
     data_path = sys.argv[1]
     write_path = sys.argv[2]
-    STANFORD_PATH=sys.argv[3]
+    STANFORD_PATH = sys.argv[3]
     s = REGPrec(data_path=data_path, write_path=write_path)
 

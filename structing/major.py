@@ -106,13 +106,12 @@ class MajorStructing():
         print('Accuracy: ', num / dem)
         return predictions, references
 
-
     def __call__(self, in_path, out_path):
-        with open(in_path) as f:
+        with open(in_path, encoding='utf-8') as f:
             entries = [t.split() for t in f.read().split('\n')]
         result = [self.predict(triples) for triples in entries]
 
-        with open(out_path, 'w') as f:
+        with open(out_path, 'w', encoding='utf-8') as f:
             doc = [' '.join(predicates) for predicates in result]
             f.write('\n'.join(doc))
 
@@ -124,7 +123,7 @@ if __name__ == '__main__':
         model = MajorStructing(trainpath)
         model(in_path=in_path, out_path=out_path)
     else:
-        path = '/roaming/tcastrof/emnlp2019/structing/data'
+        path = os.path.abspath('DeepNLG/evaluation/data/structing')
         trainpath = os.path.join(path, 'train.json')
         model = MajorStructing(trainpath)
         print('Dev set:')

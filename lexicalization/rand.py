@@ -24,11 +24,11 @@ import utils
 
 from random import randint
 
-class RandomLexicalization():
+
+class RandomLexicalization:
     def __init__(self, trainpath):
         traindata = json.load(open(trainpath))
         self.train(traindata)
-
 
     def train(self, data):
         self.model = {}
@@ -49,7 +49,6 @@ class RandomLexicalization():
 
         return self.model
 
-
     def track_entity(self, sentences):
         entities, entitytag, entity_pos = {}, {}, 1
         for snt in sentences:
@@ -66,7 +65,6 @@ class RandomLexicalization():
                     entities['ENTITY-' + str(entity_pos)] = patient
                     entity_pos += 1
         return entities, entitytag
-
 
     def predict(self, source):
         sentences = utils.split_struct(source)
@@ -107,7 +105,6 @@ class RandomLexicalization():
                 target[i] = entitytag[w]
         return target
 
-
     def evaluate(self, data):
         references, predictions = [], []
         num, dem = 0, 0
@@ -131,18 +128,18 @@ class RandomLexicalization():
         print('Accuracy: ', num / dem)
         return predictions, references
 
-
     def __call__(self, in_path, out_path):
-        with open(in_path) as f:
+        with open(in_path, encoding='utf-8') as f:
             entries = [t.split() for t in f.read().split('\n')]
         result = [self.predict(triples) for triples in entries]
 
-        with open(out_path, 'w') as f:
+        with open(out_path, 'w', encoding='utf-8') as f:
             out = [' '.join(predicates) for predicates in result]
             f.write('\n'.join(out))
 
+
 if __name__ == '__main__':
-    path = '/roaming/tcastrof/emnlp2019/lexicalization/data'
+    path = os.path.abspath('evaluation/data/lexicalization')
 
     trainpath = os.path.join(path, 'train.json')
     model = RandomLexicalization(trainpath)
@@ -167,7 +164,7 @@ if __name__ == '__main__':
                         f.write(refs[i])
                     f.write('\n')
 
-        nematus = '/roaming/tcastrof/workspace/nematus/data/multi-bleu-detok.perl'
+        nematus = os.path.abspath('DeepNLG/nematus/data/multi-bleu-detok.perl')
         command = 'perl ' + nematus + ' reference1 reference2 reference3 reference4 reference5 < predictions'
         os.system(command)
 
@@ -193,7 +190,7 @@ if __name__ == '__main__':
                         f.write(refs[i])
                     f.write('\n')
 
-        nematus = '/roaming/tcastrof/workspace/nematus/data/multi-bleu-detok.perl'
+        nematus = os.path.abspath('DeepNLG/nematus/data/multi-bleu-detok.perl')
         command = 'perl ' + nematus + ' reference1 reference2 reference3 reference4 reference5 < predictions'
         os.system(command)
 

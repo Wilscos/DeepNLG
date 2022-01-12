@@ -57,13 +57,12 @@ class Realization():
         template = template.replace('-LRB-', '(').replace('-RRB-', ')')
         return template
 
-
     def __call__(self, in_path, out_path):
-        with open(in_path) as f:
+        with open(in_path, encoding='utf-8') as f:
             entries = f.read().split('\n')
 
         result = [self.realize(entry) for entry in entries]
-        with open(out_path, 'w') as f:
+        with open(out_path, 'w', encoding='utf-8') as f:
             f.write('\n'.join(result))
 
 

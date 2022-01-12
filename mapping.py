@@ -103,29 +103,41 @@ def lexout2regin(lex_out, triples):
 
 
 def run(out_path, entries_path, task):
-    with open(out_path) as f:
+    with open(out_path, encoding='utf-8') as f:
+        print(f'- File (out_path: {out_path}) type in mapping.py: {type(f)}')
+        # There are 870 lines (of triples) for the files used, that are:
+        # - dev and test files in $root_dir/pipeline/major
+        # - dev and test files in $root_dir/pipeline/rand
+        # - dev and test files in $root_dir/pipeline/rnn
+        # - dev and test files in $root_dir/pipeline/transformer
         outputs = f.read().split('\n')
     outputs = [out.split() for out in outputs]
 
-    with open(entries_path) as f:
+    with open(entries_path, encoding='utf-8') as f:
+        print(f'- File (entries_path: {entries_path}) type in mapping.py: {type(f)}')
         entries = f.read().split('\n')
 
     entries = [utils.split_triples(t.split()) for t in entries]
     for i, entry in enumerate(entries):
+        if i == 0:
+            print(f'--- LEN ENTRIES: {len(entries)}')
+            print(f'--- LEN OUTPUTS: {len(outputs)}')
+        assert len(entries) == len(outputs)
         if task == 'ordering':
-            yield orderout2structin(ordering_out=outputs[i], triples=entry)
+            yield orderout2structin(ordering_out=outputs[i], triples=entry)  # IndexError: list index out of range
         elif task == 'structing':
-            yield structout2lexin(struct_out=outputs[i], triples=entry)
+            yield structout2lexin(struct_out=outputs[i], triples=entry)  # IndexError: list index out of range
         else:
             yield lexout2regin(lex_out=outputs[i], triples=entry)
+
 
 if __name__ == '__main__':
     entries_path = sys.argv[1]
     out_path = sys.argv[2]
     task = sys.argv[3]
-
     write_path = sys.argv[4]
+
     result = run(out_path=out_path, entries_path=entries_path, task=task)
 
-    with open(write_path, 'w') as f:
+    with open(write_path, 'w', encoding='utf-8') as f:
         f.write('\n'.join(result))

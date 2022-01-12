@@ -372,7 +372,7 @@ class NeuralREG():
             dem += 1
 
             if i < 20:
-                print ("Refex: ", refex, "\t Output: ", best_candidate)
+                print("Refex: ", refex, "\t Output: ", best_candidate)
                 print(10 * '-')
 
             results.append(outputs)

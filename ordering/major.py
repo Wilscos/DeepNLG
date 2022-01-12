@@ -102,13 +102,16 @@ class MajorOrder():
 
 
     def __call__(self, in_path, out_path):
-        with open(in_path) as f:
+        with open(in_path, encoding='utf-8') as f:
+            print(f'- File (in_path) type in major.py: {type(f)}')
             entries = [t.split() for t in f.read().split('\n')]
         result = [self.predict(triples) for triples in entries]
 
-        with open(out_path, 'w') as f:
+        with open(out_path, 'w', encoding='utf-8') as f:
+            print(f'- File (out_path) type in major.py: {type(f)}')
             doc = [' '.join(predicates) for predicates in result]
             f.write('\n'.join(doc))
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

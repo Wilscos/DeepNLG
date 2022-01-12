@@ -24,8 +24,10 @@ sys.path.append('../')
 from neuralreg import NeuralREG
 import utils
 import re
+import os
 
-class REG():
+
+class REG:
     def __init__(self, model, model_path):
         self.model = model.strip()
         if model == 'neuralreg':
@@ -42,10 +44,9 @@ class REG():
                 'EARLY_STOP': 20
             }
 
-            path = '/roaming/tcastrof/emnlp2019/reg'
+            path = os.path.abspath('evaluation/data/reg')
             self.neuralreg = NeuralREG(path=path, config=config)
             self.neuralreg.populate(model_path)
-
 
     def realize_date(self, entity):
         regex='([0-9]{4})-([0-9]{2})-([0-9]{2})'
@@ -83,7 +84,6 @@ class REG():
             return True, refex
         return False, ''
 
-
     def realize(self, entry, entity_map):
         entry = entry.split()
         pre_context = ['eos']
@@ -118,12 +118,11 @@ class REG():
                 pre_context.append(token.lower())
         return entry
 
-
     def __call__(self, in_path, order_path, out_path):
-        with open(in_path) as f:
+        with open(in_path, encoding='utf-8') as f:
             entries = f.read().split('\n')
 
-        with open(order_path) as f:
+        with open(order_path, encoding='utf-8') as f:
             ordered_triples = [utils.split_triples(t.split()) for t in f.read().split('\n')]
 
         entity_maps = [utils.entity_mapping(t) for t in ordered_triples]
@@ -138,7 +137,7 @@ class REG():
 
 
 if __name__ == '__main__':
-    path = '/roaming/tcastrof/emnlp2019/lexicalization/surfacevocab.json'
+    path = os.path.abspath('DeepNLG/results/lexicalization/surfacevocab.json')
 
     in_path = sys.argv[1]
     order_path = sys.argv[2]

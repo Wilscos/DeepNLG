@@ -213,7 +213,7 @@ echo "root_pipeline=$root_pipeline" > scripts/tmp
 
 for baseline in rand major
   do
-    pipeline_dir=$root_pipeline/$baseline
+    pipeline_dir=$root_pipeline/$baseline   # pipeline/rand and pipeline/major
     if [ ! -d "$pipeline_dir" ];
     then
       mkdir $pipeline_dir
@@ -241,8 +241,10 @@ for baseline in rand major
           # lexicalization
           python lexicalization/$baseline.py $pipeline_dir/$set.structing.mapped $pipeline_dir/$set.lex $root_dir/structing/data/train.json
           # referring expression generation
+          # TODO: But dev.lex and test.lex are not present in $root_dir/pipeline/rand
           python reg/generate.py $pipeline_dir/$set.lex $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.reg baseline path
           # textual realization
+          # TODO: But dev.reg and test.reg are not present in $root_dir/pipeline/rand
           python realization.py $pipeline_dir/$set.reg $pipeline_dir/$set.realized $root_dir/lexicalization/surfacevocab.json
         else
           python3 ordering/$baseline.py $pipeline_dir/$set.$eval $pipeline_dir/$set.ordering $root_dir/ordering/data/train.json
@@ -333,6 +335,7 @@ for model in transformer rnn
 
         if [ "$OSTYPE" == "msys" ]; then
           echo "Your OS: $OSTYPE"
+          # TODO: There is no data in these files
           python mapping.py $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.lex.postprocessed lexicalization $pipeline_dir/$set.lex.mapped
           # reg
           python reg/generate.py $pipeline_dir/$set.lex.postprocessed $pipeline_dir/$set.ordering.mapped $pipeline_dir/$set.reg neuralreg $root_dir/reg/model1.dy
