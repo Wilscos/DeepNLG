@@ -16,7 +16,7 @@ echo "- Language: $lng"
 echo "Your OS: $OSTYPE"
 scripts_directory=$( cd "$(dirname "${BASH_SOURCE[0]}")" || exit; pwd -P )
 working_directory="$( dirname "$scripts_directory")"
-echo "(OS: msys) Working directory $working_directory"
+echo "Working directory $working_directory"
 
 # Nematus home path
 nematus_home=$working_directory/nematus
